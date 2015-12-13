@@ -1,48 +1,27 @@
-# Natural Language Toolkit (NLTK)
+# Natural Language Toolkit (NLTK) with Stanford NLP package
 
-NLTK -- the Natural Language Toolkit -- is a suite of open source Python
-modules, data sets and tutorials supporting research and development in Natural
-Language Processing.
+Added Stanford's multilingual segmenter to NLTK, and tuned the original stanford api.
 
-For documentation, please visit [nltk.org](http://www.nltk.org/).
+## Usage
 
+``` python
+from nltk.tokenize.stanford_segmenter import StanfordSegmenter
+from nltk.tag.stanford_tagger import StanfordNERTagger
+from nltk.tag.stanford_tagger import StanfordPOSTagger
 
-## Contributing
+segmenter = StanfordSegmenter(base_path='/Users/DY/Downloads/stanford-segmenter', path_to_jar='stanford-segmenter.jar', path_to_sihan_corpora_dict='data', path_to_model='data/pku.gz', path_to_dict='data/dict-chris6.ser.gz', appendix_jar_path='/Users/DY/Downloads/stanford-segmenter/log4j')
+strs = [u'我在做中文分词.', u'你好!']
+result, raw_result = segmenter.segment_sents(strs)
+print(result)
+print(raw_result)
 
-Do you want to contribute with NLTK development? Great! Please read more details
-at [CONTRIBUTING.md](CONTRIBUTING.md).
+tagger = StanfordPOSTagger(path_to_model='models/chinese-distsim.tagger', path_to_jar='stanford-postagger.jar', base_path='/Users/DY/Downloads/stanford-postagger-full', appendix_jar_path='/Users/DY/Downloads/stanford-segmenter/log4j')
+result, raw_result = tagger.tag_sents([[u'我', u'在', u'做', u'中文', u'分词', u'.'], [u'你', u'好', u'!']])
+print(raw_result)
+print(result)
 
-See also [How to contribute to NLTK](http://www.nltk.org/contribute.html).
-
-
-## Donate
-
-Have you found the toolkit helpful?  Please support NLTK development by donating
-to the project via PayPal, using the link on the NLTK homepage.
-
-
-## Citing
-
-If you publish work that uses NLTK, please cite the NLTK book, as follows:
-
-    Bird, Steven, Edward Loper and Ewan Klein (2009).
-    Natural Language Processing with Python.  O'Reilly Media Inc.
-
-
-## Copyright
-
-Copyright (C) 2001-2015 NLTK Project
-
-For license information, see [LICENSE.txt](LICENSE.txt).
-
-[AUTHORS.md](AUTHORS.md) have a list of everyone contributed to NLTK.
-
-
-### Redistributing
-
-- NLTK source code is distributed under the Apache 2.0 License.
-- NLTK documentation is distributed under the Creative Commons
-  Attribution-Noncommercial-No Derivative Works 3.0 United States license.
-- NLTK corpora are provided under the terms given in the README file for each
-  corpus; all are redistributable, and available for non-commercial use.
-- NLTK may be freely redistributed, subject to the provisions of these licenses.
+ner = StanfordNERTagger(path_to_jar='stanford-ner.jar', path_to_model='classifiers/chinese.misc.distsim.crf.ser.gz', base_path='/Users/DY/Downloads/stanford-ner', appendix_jar_path='/Users/DY/Downloads/stanford-segmenter/log4j')
+result, raw_result = ner.tag_sents([[u'我', u'在', u'做', u'中文', u'分词'], [u'中国', u'中央电视台']])
+print raw_result
+print result
+```
